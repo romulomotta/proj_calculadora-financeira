@@ -236,7 +236,7 @@
         calculateEstudo() {
           // Calcular o valor ideal para a linha Conforto (25% do salário)
           let salarioNumber = parseFloat(this.salario.replace(/\D/g, ''));
-          let calculoIdeal = (salarioNumber * 0.25).toFixed(2).replace('.', ',');
+          let calculoIdeal = (salarioNumber * 0.05).toFixed(2).replace('.', ',');
           this.estudoIdeal = isNaN(parseFloat(calculoIdeal)) ? 0 : calculoIdeal;
 
           let atualNumber = parseFloat(this.estudoAtual.replace(/\D/g, ''));
@@ -256,7 +256,11 @@
           'calculateEstudo'
         ],
         fixosAtual: 'calculateFixos',
-        confortoAtual: 'calculateConforto'
+        confortoAtual: 'calculateConforto',
+        metasAtual: 'calculateMetas',
+        prazeresAtual: 'calculatePrazeres',
+        investimentoAtual:'calculateInvestimento',
+        estudoAtual:'calculateEstudo'
 
       },
       mounted() {
