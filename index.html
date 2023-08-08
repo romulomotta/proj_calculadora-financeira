@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Calculadora de Orçamento</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    tbody {
+      color: white;
+    }
+
+    .rounded-box {
+      background-color: #292b2c;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      border-radius: 10px;
+      padding: 5px;
+      border: none;
+    }
+
+    td input {
+      width: 75%;
+    }
+
+    th {
+      color: rgb(228, 179, 47);
+    }
+
+    .descricao {
+      color: rgb(1, 226, 196);
+    }
+
+    .alcance {
+      color: rgb(165, 219, 148);
+    }
+
+    th,
+    td {
+      text-align: center;
+    }
+  </style>
+
+  <div id="app" class="container">
+    <div class="rounded-box">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <p><span class="descricao">Insira seu salário líquido:</span></p>
+        </div>
+        <div class="col-md-6">
+          R$ <input class="col-md-6" type="text" v-model="salario" @input="formatSalario" placeholder="0">,00
+        </div>
+      </div>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Divisões</th>
+            <th>Atual</th>
+            <th>Ideal</th>
+            <th>Alcance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="descricao">Fixos</span></td>
+            <td>R$ <input type="text" class="atual" v-model="fixosAtual" @input="formatCampo('fixosAtual')"
+                placeholder="0"></td>
+            <td>R$ <input type="text" class="ideal" v-model="fixosIdeal" readonly></td>
+            <td><span type="text" class="alcance">{{ fixosAlcance }}%</span></td>
+          </tr>
+          <tr>
+            <td><span class="descricao">Conforto</span></td>
+            <td>R$ <input type="text" class="atual" v-model="confortoAtual" @input="formatCampo('confortoAtual')"
+                placeholder="0"></td>
+            <td>R$ <input type="text" class="ideal" v-model="confortoIdeal" readonly></td>
+            <td><span type="text" class="alcance">{{ confortoAlcance }}%</span></td>
+          </tr>
+          <tr>
+            <td><span class="descricao">Metas</span></td>
+            <td>R$ <input type="text" class="atual" v-model="metasAtual" @input="formatCampo('metasAtual')"
+                placeholder="0"></td>
+            <td>R$ <input type="text" class="ideal" v-model="metasIdeal" readonly></td>
+            <td><span type="text" class="alcance">{{ metasAlcance }}%</span></td>
+          </tr>
+          <tr>
+            <td><span class="descricao">Prazeres</span></td>
+            <td>R$ <input type="text" class="atual" v-model="prazeresAtual" @input="formatCampo('prazeresAtual')"
+                placeholder="0"></td>
+            <td>R$ <input type="text" class="ideal" v-model="prazeresIdeal" readonly></td>
+            <td><span type="text" class="alcance">{{ prazeresAlcance }}%</span></td>
+          </tr>
+          <tr>
+            <td><span class="descricao">Investimento</span></td>
+            <td>R$ <input type="text" class="atual" v-model="investimentoAtual"
+                @input="formatCampo('investimentoAtual')" placeholder="0"></td>
+            <td>R$ <input type="text" class="ideal" v-model="investimentoIdeal" readonly></td>
+            <td><span type="text" class="alcance">{{ investimentoAlcance }}%</span></td>
+          </tr>
+          <tr>
+            <td><span class="descricao">Estudo</span></td>
+            <td>R$ <input type="text" class="atual" v-model="estudoAtual" @input="formatCampo('estudoAtual')"
+                placeholder="0"></td>
+            <td>R$ <input type="text" class="ideal" v-model="estudoIdeal" readonly></td>
+            <td><span type="text" class="alcance">{{ estudoAlcance }}%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        salario: '',
+
+        fixosAtual: '',
+        fixosIdeal: '',
+        fixosAlcance: '',
+
+        confortoAtual: '',
+        confortoIdeal: '',
+        confortoAlcance: '',
+
+        metasAtual: '',
+        metasIdeal: '',
+        metasAlcance: '',
+
+        prazeresAtual: '',
+        prazeresIdeal: '',
+        prazeresAlcance: '',
+
+        investimentoAtual: '',
+        investimentoIdeal: '',
+        investimentoAlcance: '',
+
+        estudoAtual: '',
+        estudoIdeal: '',
+        estudoAlcance: ''
+      },
+      methods: {
+        formatSalario() {
+          // Remover todos os caracteres não numéricos do campo de salário
+          const numericValue = this.salario.replace(/\D/g, '');
+
+          if (numericValue.length > 0) {
+            this.salario = `${numericValue}`;
+          } else {
+            this.salario = '';
+          }
+        },
+        formatCampo(campo) {
+          let numericValue = this[campo].replace(/\D/g, '');
+
+          if (numericValue.length > 0) {
+            this[campo] = `${numericValue}`;
+
+          } else {
+            this[campo] = '';
+          }
+        },
+        calculateFixos() {
+          // Calcular o valor ideal para a linha Fixos (30% do salário)
+          let salarioNumber = parseFloat(this.salario.replace(/\D/g, '')); // Converter o valor para número
+          let calculoIdeal = (salarioNumber * 0.30).toFixed(2).replace('.', ',');
+          this.fixosIdeal = isNaN(parseFloat(calculoIdeal)) ? 0 : calculoIdeal;
+
+          let fixosAtualNumber = parseFloat(this.fixosAtual.replace(/\D/g, '')); // Converter o valor para número
+          let calculoAlcance = parseFloat(this.fixosIdeal) > 0
+            ? ((fixosAtualNumber * 100) / parseFloat(this.fixosIdeal)).toFixed(1)
+            : 0;
+          this.fixosAlcance = isNaN(parseFloat(calculoAlcance)) ? 0 : calculoAlcance;
+        },
+        calculateConforto() {
+          // Calcular o valor ideal para a linha Conforto (20% do salário)
+          let salarioNumber = parseFloat(this.salario.replace(/\D/g, ''));
+          let calculoIdeal = (salarioNumber * 0.20).toFixed(2).replace('.', ',');
+          this.confortoIdeal = isNaN(parseFloat(calculoIdeal)) ? 0 : calculoIdeal;
+
+          let atualNumber = parseFloat(this.confortoAtual.replace(/\D/g, ''));
+          let calculoAlcance = parseFloat(this.confortoIdeal) > 0
+            ? ((atualNumber * 100) / parseFloat(this.confortoIdeal)).toFixed(1)
+            : 0;
+          this.confortoAlcance = isNaN(parseFloat(calculoAlcance)) ? 0 : calculoAlcance;
+        },
+        calculateMetas() {
+          // Calcular o valor ideal para a linha Conforto (10% do salário)
+          let salarioNumber = parseFloat(this.salario.replace(/\D/g, ''));
+          let calculoIdeal = (salarioNumber * 0.10).toFixed(2).replace('.', ',');
+          this.metasIdeal = isNaN(parseFloat(calculoIdeal)) ? 0 : calculoIdeal;
+
+          let atualNumber = parseFloat(this.metasAtual.replace(/\D/g, ''));
+          let calculoAlcance = parseFloat(this.metasIdeal) > 0
+            ? ((atualNumber * 100) / parseFloat(this.metasIdeal)).toFixed(1)
+            : 0;
+          this.metasAlcance = isNaN(parseFloat(calculoAlcance)) ? 0 : calculoAlcance;
+        },
+        calculatePrazeres() {
+          // Calcular o valor ideal para a linha Conforto (10% do salário)
+          let salarioNumber = parseFloat(this.salario.replace(/\D/g, ''));
+          let calculoIdeal = (salarioNumber * 0.10).toFixed(2).replace('.', ',');
+          this.prazeresIdeal = isNaN(parseFloat(calculoIdeal)) ? 0 : calculoIdeal;
+
+          let atualNumber = parseFloat(this.prazeresAtual.replace(/\D/g, ''));
+          let calculoAlcance = parseFloat(this.prazeresIdeal) > 0
+            ? ((atualNumber * 100) / parseFloat(this.prazeresIdeal)).toFixed(1)
+            : 0;
+          this.prazeresAlcance = isNaN(parseFloat(calculoAlcance)) ? 0 : calculoAlcance;
+        },
+        calculateInvestimento() {
+          // Calcular o valor ideal para a linha Conforto (25% do salário)
+          let salarioNumber = parseFloat(this.salario.replace(/\D/g, ''));
+          let calculoIdeal = (salarioNumber * 0.25).toFixed(2).replace('.', ',');
+          this.investimentoIdeal = isNaN(parseFloat(calculoIdeal)) ? 0 : calculoIdeal;
+
+          let atualNumber = parseFloat(this.investimentoAtual.replace(/\D/g, ''));
+          let calculoAlcance = parseFloat(this.investimentoIdeal) > 0
+            ? ((atualNumber * 100) / parseFloat(this.investimentoIdeal)).toFixed(1)
+            : 0;
+          this.investimentoAlcance = isNaN(parseFloat(calculoAlcance)) ? 0 : calculoAlcance;
+        },
+        calculateEstudo() {
+          // Calcular o valor ideal para a linha Conforto (25% do salário)
+          let salarioNumber = parseFloat(this.salario.replace(/\D/g, ''));
+          let calculoIdeal = (salarioNumber * 0.25).toFixed(2).replace('.', ',');
+          this.estudoIdeal = isNaN(parseFloat(calculoIdeal)) ? 0 : calculoIdeal;
+
+          let atualNumber = parseFloat(this.estudoAtual.replace(/\D/g, ''));
+          let calculoAlcance = parseFloat(this.estudoIdeal) > 0
+            ? ((atualNumber * 100) / parseFloat(this.estudoIdeal)).toFixed(1)
+            : 0;
+          this.estudoAlcance = isNaN(parseFloat(calculoAlcance)) ? 0 : calculoAlcance;
+        }
+      },
+      watch: {
+        salario: [
+          'calculateFixos',
+          'calculateConforto',
+          'calculateMetas',
+          'calculatePrazeres',
+          'calculateInvestimento',
+          'calculateEstudo'
+        ],
+        fixosAtual: 'calculateFixos',
+        confortoAtual: 'calculateConforto'
+
+      },
+      mounted() {
+        this.calculateFixos(); // Inicialmente calcular o valor ideal
+        this.calculateConforto();
+        this.calculateMetas();
+        this.calculatePrazeres();
+        this.calculateInvestimento();
+        this.calculateEstudo();
+      }
+    });
+  </script>
+</body>
+</html>
