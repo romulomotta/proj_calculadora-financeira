@@ -30,19 +30,14 @@
 
     input {
       border-radius: 10px;
-      padding: 5px;
-      border: none;
-    }
-
-    td input {
-      width: 75%;
     }
 
     th {
       color: rgb(228, 179, 47);
     }
 
-    .descricao {
+    .descricao,
+    .descricao-salario {
       color: rgb(1, 226, 196);
     }
 
@@ -54,16 +49,64 @@
     td {
       text-align: center;
     }
+
+    /* INICIO - CONFIG ONLY COMPUTADOR */
+    @media (min-width: 800px) {
+
+      input {
+        padding: 5px;
+        border: none;
+        width: 50%;
+      }
+
+      .descricao-salario {
+        margin-left: 30%;
+        margin-bottom: -30px;
+      }
+
+      .dados-salario {
+        margin-left: 60%;
+      }
+
+    }
+
+    /* INICIO - CONFIG MOBILE */
+    @media (max-width: 768px) {
+      .rounded-box {
+        padding: 5px;
+        font-size: 10px;
+      }
+
+      input {
+        width: 75%;
+      }
+
+      .table td {
+        padding: 0;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      .descricao-salario {
+        font-size: 15px;
+      }
+
+      .descricao-salario,
+      .dados-salario {
+        margin-left: 25%;
+        margin-right: 25%;
+      }
+    }
   </style>
 
   <div id="app" class="container">
+    <br />
     <div class="rounded-box">
       <div class="row mb-3">
-        <div class="col-md-6">
-          <p><span class="descricao">Insira seu salário líquido:</span></p>
-        </div>
-        <div class="col-md-6">
-          R$ <input class="col-md-6" type="text" v-model="salario" @input="formatSalario" placeholder="0">,00
+        <div class="col-md-12">
+          <div class="descricao-salario">Insira seu salário líquido:</div>
+          <div class="dados-salario">R$ <input type="text" v-model="salario" @input="formatSalario" placeholder="0">,00
+          </div>
         </div>
       </div>
       <table class="table table-bordered">
@@ -259,8 +302,8 @@
         confortoAtual: 'calculateConforto',
         metasAtual: 'calculateMetas',
         prazeresAtual: 'calculatePrazeres',
-        investimentoAtual:'calculateInvestimento',
-        estudoAtual:'calculateEstudo'
+        investimentoAtual: 'calculateInvestimento',
+        estudoAtual: 'calculateEstudo'
 
       },
       mounted() {
@@ -274,4 +317,5 @@
     });
   </script>
 </body>
+
 </html>
